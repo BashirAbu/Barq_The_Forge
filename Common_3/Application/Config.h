@@ -183,6 +183,21 @@ COMPILE_ASSERT(sizeof(ssize_t) == sizeof(int64_t));
 #define FORGE_IMPORT
 #endif
 
+#ifdef FORGE_DLL_EXPORT
+#define FORGE_API FORGE_EXPORT
+#define FORGE_RENDERER_API FORGE_EXPORT
+#define FORGE_TOOL_API FORGE_EXPORT
+#elif defined(FORGE_DLL_IMPORT)
+#define FORGE_API FORGE_IMPORT
+#define FORGE_RENDERER_API FORGE_IMPORT
+#define FORGE_TOOL_API FORGE_IMPORT
+#else
+#define FORGE_API
+#define FORGE_RENDERER_API
+#define FORGE_TOOL_API
+#endif
+
+
 #ifdef __cplusplus
 #ifndef MAKE_ENUM_FLAG
 #define MAKE_ENUM_FLAG(TYPE, ENUM_TYPE)                                                                                      \
@@ -235,12 +250,6 @@ COMPILE_ASSERT(sizeof(ssize_t) == sizeof(int64_t));
 #define WINVER        _WIN32_WINNT_WIN7
 #define _WIN32_WINNT  _WIN32_WINNT_WIN7
 
-// Whitelist of compiler versions
-#if (_MSC_VER == 1929) // VS 2019 all VC++ compilers
-#else
-#pragma message("Bad Visual Studio version: (" QUOTE(_MSC_VER) " " QUOTE(_MSC_FULL_VER) " " QUOTE(_MSC_BUILD) ").")
-#error "Bad Visual Studio version"
-#endif
 
 #endif
 
@@ -368,9 +377,7 @@ COMPILE_ASSERT(sizeof(ssize_t) == sizeof(int64_t));
 //                         This define allows to hide Renderer functionality to the Game, so that if someone tries to use it it'll get a
 //                         linker error.
 //   - FORGE_TOOL_API: is used to expose tool functionality, mostly tool filesystem.
-#define FORGE_API
-#define FORGE_RENDERER_API
-#define FORGE_TOOL_API
+
 
 #ifndef FORGE_DEBUG
 #if defined(DEBUG) || defined(_DEBUG) || defined(AUTOMATED_TESTING)
